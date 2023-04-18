@@ -1,0 +1,60 @@
+import numpy as np 
+
+
+#loi geometrique
+def geometrique(p):
+    x=np.random.binomial(1,p)
+    Y=1
+    while x!=1:
+        Y+=1
+        x=np.random.binomial(1,p)
+    return Y
+print(geometrique(0.2))
+
+
+
+p=0.2
+N=100000
+array=np.zeros((N,2))
+for i in range(1,N):
+    Y=geometrique(0.2)
+    array[Y][0]=Y      #la variable aleatoire
+    array[Y][1]+=1    # en face de Y le nombre des repetions
+    
+for i in range(1,4):
+    print(f"Y={i}, de frq={array[i][1]/N}")
+    
+print("avec la formule")
+for i in range(1,4):
+    print(f"Y={i}, de proba={((1-p)**(i-1))*p}")
+    
+
+def poisson(lamda,N):
+    p=lamda/N
+    z=0
+    for i in range(N):
+        x=np.random.binomial(1,p)
+        z+=x
+    return z
+#test
+
+tests=10000
+array=np.zeros(500)
+for i in range(tests):
+    z=poisson(10,500)
+    array[z]+=1       #array[z]=le nombre de fois ou z est realisé   
+for i in range(9,12):
+    print(f"Z={i}, de frequence={array[i]/tests}")
+    
+print("comparaison avec la probabilité")
+for i in range(9,12):
+    print(f"z={i}, de proba={np.exp(-10)*((10**i)/np.math.factorial(i))}")
+    
+    
+def mixte(alpha,lamda,q,N):
+    x=np.random.binomial(1,p)
+    if x==0:
+        z=poisson(lamda,N)
+    else:
+        z=geometrique(q)
+    return z
