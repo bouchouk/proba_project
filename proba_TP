@@ -1,0 +1,92 @@
+import numpy as np 
+n=int(input())
+out=0
+whealth=int(input())
+players=np.zeros(n, dtype=int)
+for i in range(n):
+    players[i]=whealth
+def choose_players(n,players):
+    x=np.random.randint(0,n)
+    y=np.random.randint(0,n)
+    while x==y:
+        y=np.random.randint(0,n)
+    return x,y
+choose_players(n,players)
+    
+
+def game(players,out):
+    n=players.shape[0]
+    x,y=choose_players(n,players)
+    chance=np.random.randint(0,2)
+    #while players[x]==0:
+     #   x,b=choose_players(n,players)
+    #while players[y]==0:
+     #   y,b=choose_players(n,players)    
+    if chance%2==0:
+        players[y]-=1
+        players[x]+=1
+        if players[y]==0:
+            out+=1
+    else:
+        players[x]-=1
+        players[y]+=1
+        if players[x]==0:
+            out+=1
+    return out
+
+  
+
+def final_result(players,games):
+    out=0
+    n=players.shape[0]
+    for i in range(games):
+        if out<n-1:
+            out=game(players,out)
+            #print("out",out)
+        else:
+            break
+    number_of_games=i+1
+    #for i in range(players.shape[0]):
+        #print(i,":",players[i])
+        
+    return number_of_games
+
+final_result(players,4000)
+
+
+def initialise(wealth,n):
+    out=0
+    players=np.zeros(n, dtype=int)
+    for i in range(n):
+        players[i]=whealth
+    return players,out
+
+def E(a):
+    arr=np.zeros(a, dtype=int)
+    for i in range(2,a):
+        out =0
+        players=np.zeros(2, dtype=int)
+        players[0]=i
+        players[1]=i
+        x=0
+        for j in range(100):
+            number_of_games = final_result(players,10000)
+            x+=number_of_games
+            out =0
+            players=np.zeros(2, dtype=int)
+            players[0]=i
+            players[1]=i
+        arr[i]=x/100
+    return arr
+arr=E(20)
+arry=np.zeros(20, dtype=int)
+for i in range(20):
+    print(i,":",arr[i])
+    arry[i]=i
+        
+
+from matplotlib import pyplot as plt
+plt.plot(arry,arr)
+
+plt.plot(np.log(arry),np.log(arr))
+
